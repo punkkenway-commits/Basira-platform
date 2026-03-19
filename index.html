@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BASIRA — Casing Design Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #040c18;
+  --bg2:   #071224;
+  --bg3:   #0a1a30;
+  --border:#1a3050;
+  --amber: #f59e0b;
+  --amber-dim:#92600a;
+  --blue:  #38bdf8;
+  --green: #22c55e;
+  --red:   #ef4444;
+  --orange:#fb923c;
+  --text:  #cbd5e1;
+  --text-bright:#f1f5f9;
+  --text-dim:   #64748b;
+  --mono:  'IBM Plex Mono', monospace;
+  --raj:   'Rajdhani', sans-serif;
+  --orb:   'Orbitron', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--raj);font-weight:400;line-height:1.6;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,#1a3050 1px,transparent 1px);background-size:32px 32px;opacity:0.35;pointer-events:none;z-index:0;}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(4,12,24,0.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;}
+.nav-logo{font-family:var(--orb);font-size:1.2rem;font-weight:700;color:var(--amber);letter-spacing:0.2em;display:flex;align-items:center;gap:0.6rem;}
+.nav-logo svg{width:22px;height:22px;}
+.nav-links{display:flex;gap:1.8rem;list-style:none;}
+.nav-links a{color:var(--text-dim);text-decoration:none;font-family:var(--raj);font-size:0.88rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--amber);}
+.nav-right{display:flex;align-items:center;gap:1rem;}
+.lang-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:3px;gap:3px;}
+.lang-btn{padding:4px 11px;border:none;background:none;color:var(--text-dim);font-family:var(--raj);font-weight:600;font-size:0.8rem;cursor:pointer;border-radius:3px;transition:all .2s;letter-spacing:0.05em;}
+.lang-btn.active{background:var(--amber);color:#000;}
+.toggle-group{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.toggle-opt{flex:1;padding:5px 13px;background:none;border:none;color:var(--text-dim);font-family:var(--mono);font-size:0.72rem;cursor:pointer;transition:all .2s;text-align:center;}
+.toggle-opt.active{background:var(--amber);color:#000;}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 2rem 4rem;overflow:hidden;z-index:1;}
+.hero-glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.07) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:6px 18px;border:1px solid var(--amber-dim);border-radius:20px;font-family:var(--mono);font-size:.72rem;color:var(--amber);margin-bottom:2rem;letter-spacing:.12em;}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+.hero h1{font-family:var(--orb);font-size:clamp(2.5rem,6vw,5rem);font-weight:900;color:var(--text-bright);letter-spacing:.1em;line-height:1.05;margin-bottom:.4rem;}
+.hero h1 em{color:var(--amber);font-style:normal;}
+.hero-sub{font-size:clamp(.95rem,2vw,1.2rem);color:var(--text-dim);max-width:640px;margin:.9rem auto .4rem;letter-spacing:.04em;}
+.hero-tagline{font-family:var(--mono);font-size:.8rem;color:var(--blue);margin-bottom:2.5rem;letter-spacing:.08em;}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.btn-primary{padding:12px 28px;background:var(--amber);color:#000;border:none;border-radius:4px;font-family:var(--raj);font-weight:700;font-size:.95rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .2s;display:inline-block;}
+.btn-primary:hover{background:#fbbf24;transform:translateY(-2px);box-shadow:0 0 24px rgba(245,158,11,.45);}
+.btn-outline{padding:12px 28px;background:transparent;color:var(--text);border:1px solid var(--border);border-radius:4px;font-family:var(--raj);font-weight:600;font-size:.95rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .2s;display:inline-block;}
+.btn-outline:hover{border-color:var(--amber);color:var(--amber);}
+.stats-bar{display:flex;justify-content:center;gap:3.5rem;margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border);flex-wrap:wrap;}
+.stat-item{text-align:center;}
+.stat-value{font-family:var(--orb);font-size:1.9rem;font-weight:700;color:var(--amber);display:block;}
+.stat-label{font-family:var(--mono);font-size:.65rem;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;}
+
+/* SECTIONS */
+section{position:relative;z-index:1;padding:5rem 2rem;max-width:1400px;margin:0 auto;}
+.sec-tag{font-family:var(--mono);font-size:.68rem;color:var(--amber);letter-spacing:.22em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.sec-tag::before{content:'//';color:var(--text-dim);}
+h2.sec-title{font-family:var(--orb);font-size:clamp(1.4rem,3vw,2.3rem);font-weight:700;color:var(--text-bright);margin-bottom:3rem;letter-spacing:.05em;}
+
+/* PANELS */
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+.panel-hd{padding:.85rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(10,26,48,.5);}
+.panel-title{font-family:var(--raj);font-size:.8rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);display:flex;align-items:center;gap:.5rem;}
+.panel-title .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);}
+.panel-body{padding:1.4rem;}
+.panel-body.scroll{max-height:700px;overflow-y:auto;}
+
+/* CALCULATOR */
+#calculator{padding-top:100px;}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;}
+@media(max-width:1100px){.calc-grid{grid-template-columns:1fr;}}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.fg{display:flex;flex-direction:column;gap:.35rem;}
+.fg.full{grid-column:1/-1;}
+label{font-family:var(--mono);font-size:.65rem;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;}
+input,select{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:8px 11px;color:var(--text-bright);font-family:var(--mono);font-size:.88rem;outline:none;transition:border-color .2s;width:100%;}
+input:focus,select:focus{border-color:var(--amber);}
+select option{background:var(--bg2);}
+.unit-badge{font-family:var(--mono);font-size:.62rem;color:var(--blue);background:rgba(56,189,248,.1);padding:2px 7px;border-radius:3px;border:1px solid rgba(56,189,248,.2);}
+.calc-btn{width:100%;padding:13px;background:var(--amber);color:#000;border:none;border-radius:4px;font-family:var(--orb);font-weight:700;font-size:.85rem;letter-spacing:.15em;cursor:pointer;margin-top:1.4rem;transition:all .2s;text-transform:uppercase;}
+.calc-btn:hover{background:#fbbf24;box-shadow:0 0 28px rgba(245,158,11,.45);}
+.ex-row{display:flex;gap:.5rem;margin-top:.85rem;flex-wrap:wrap;}
+.ex-btn{flex:1;min-width:80px;padding:7px 5px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text-dim);font-family:var(--mono);font-size:.66rem;cursor:pointer;transition:all .2s;text-align:center;line-height:1.5;}
+.ex-btn:hover{border-color:var(--amber);color:var(--amber);background:rgba(245,158,11,.05);}
+
+/* RESULTS */
+.results-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 2rem;color:var(--text-dim);font-family:var(--mono);font-size:.8rem;text-align:center;letter-spacing:.05em;}
+.results-placeholder .icon{font-size:2.8rem;margin-bottom:.9rem;opacity:.25;}
+.result-tier{display:flex;align-items:center;gap:1.2rem;padding:1.3rem;background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);border-radius:6px;margin-bottom:1.3rem;}
+.tier-df{font-family:var(--orb);font-size:2.6rem;font-weight:900;color:var(--amber);line-height:1;min-width:78px;text-align:center;}
+.tier-df-lbl{font-family:var(--mono);font-size:.58rem;color:var(--text-dim);letter-spacing:.12em;text-align:center;margin-top:3px;}
+.tier-info h3{font-family:var(--raj);font-size:1.15rem;font-weight:700;color:var(--text-bright);letter-spacing:.05em;}
+.tier-info p{font-family:var(--mono);font-size:.72rem;color:var(--text-dim);margin-top:2px;}
+.tier-info .reason{color:var(--amber);font-size:.7rem;margin-top:5px;}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.3rem;}
+.rc{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:.9rem;}
+.rc-lbl{font-family:var(--mono);font-size:.62rem;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem;}
+.rc-val{font-family:var(--orb);font-size:1.15rem;font-weight:600;color:var(--text-bright);line-height:1.2;}
+.rc-unit{font-family:var(--mono);font-size:.62rem;color:var(--blue);margin-top:3px;}
+.rc-val.pass{color:var(--green);}
+.rc-val.fail{color:var(--red);}
+.rc-val.warn{color:var(--orange);}
+.util-container{margin-bottom:1.3rem;}
+.util-lbl{display:flex;justify-content:space-between;margin-bottom:.45rem;font-family:var(--mono);font-size:.67rem;}
+.util-lbl .ttl{color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;}
+.util-track{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;border:1px solid var(--border);}
+.util-fill{height:100%;border-radius:4px;transition:width .9s ease;background:linear-gradient(90deg,var(--green),var(--amber));}
+.util-fill.danger{background:linear-gradient(90deg,var(--orange),var(--red));}
+.badges{display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:1.3rem;}
+.badge{padding:5px 12px;border-radius:3px;font-family:var(--mono);font-size:.67rem;letter-spacing:.07em;display:flex;align-items:center;gap:.4rem;}
+.badge.pass{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green);}
+.badge.fail{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--red);}
+.badge.info{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);color:var(--blue);}
+.badge.warn{background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);color:var(--orange);}
+.sec-hdr{font-family:var(--mono);font-size:.63rem;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:.5rem;margin:1.4rem 0 .9rem;}
+.spec-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.75rem;}
+.spec-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+.spec-table td:first-child{color:var(--text-dim);text-transform:uppercase;font-size:.62rem;letter-spacing:.08em;width:50%;}
+.spec-table td:last-child{color:var(--text-bright);text-align:right;}
+
+/* CANVAS */
+.canvas-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1rem;}
+.canvas-ttl{font-family:var(--mono);font-size:.65rem;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem;}
+canvas{width:100%;height:auto;display:block;}
+
+/* THEORY */
+.theory-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.4rem;}
+.th-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1.4rem;}
+.th-card h3{font-family:var(--raj);font-size:1rem;font-weight:700;color:var(--amber);margin-bottom:.7rem;letter-spacing:.05em;text-transform:uppercase;}
+.th-card p{font-size:.88rem;color:var(--text-dim);line-height:1.7;margin-bottom:.7rem;}
+.eq-box{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:3px;padding:.65rem 1rem;font-family:var(--mono);font-size:.76rem;color:var(--text-bright);letter-spacing:.03em;margin-top:.65rem;line-height:1.8;}
+
+/* TIER TABLE */
+.tier-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.74rem;}
+.tier-table th{background:var(--bg3);padding:8px 14px;text-align:left;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border);}
+.tier-table td{padding:9px 14px;border-bottom:1px solid rgba(26,48,80,.5);color:var(--text);}
+.tier-table tr:hover td{background:rgba(245,158,11,.04);}
+.df-col{font-family:var(--orb);font-weight:600;}
+
+/* EXAMPLES */
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:1.4rem;}
+.ex-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1.4rem;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.ex-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;}
+.ex-card.sour::before{background:var(--orange);}
+.ex-card.hthp::before{background:var(--red);}
+.ex-card.dir::before{background:var(--blue);}
+.ex-card.deep::before{background:var(--green);}
+.ex-card:hover{border-color:var(--amber);transform:translateY(-3px);box-shadow:0 10px 35px rgba(0,0,0,.5);}
+.ex-num{font-family:var(--mono);font-size:.62rem;color:var(--text-dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.7rem;}
+.ex-name{font-family:var(--raj);font-size:1.15rem;font-weight:700;color:var(--text-bright);margin-bottom:.4rem;}
+.ex-df{font-family:var(--orb);font-size:2rem;font-weight:700;color:var(--amber);margin:.7rem 0;}
+.ex-params{font-family:var(--mono);font-size:.68rem;color:var(--text-dim);line-height:1.85;}
+.ex-params span{color:var(--text);}
+.load-btn{margin-top:.9rem;padding:7px 14px;background:transparent;border:1px solid var(--border);border-radius:3px;color:var(--text-dim);font-family:var(--mono);font-size:.67rem;cursor:pointer;transition:all .2s;letter-spacing:.1em;text-transform:uppercase;width:100%;}
+.load-btn:hover{border-color:var(--amber);color:var(--amber);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.results-show{animation:fadeUp .4s ease;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem;text-align:center;font-family:var(--mono);font-size:.67rem;color:var(--text-dim);letter-spacing:.05em;line-height:2;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <polygon points="12 2 22 7 22 17 12 22 2 17 2 7"/>
+      <polygon points="12 7 17 9.5 17 14.5 12 17 7 14.5 7 9.5"/>
+    </svg>
+    BASIRA
+  </div>
+  <ul class="nav-links">
+    <li><a href="#calculator">Calculator</a></li>
+    <li><a href="#theory">Theory</a></li>
+    <li><a href="#examples">Examples</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="toggle-group">
+      <button class="toggle-opt active" onclick="setUnits('si')">SI</button>
+      <button class="toggle-opt" onclick="setUnits('field')">FIELD</button>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('ar')">AR</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge"><span class="dot"></span>OPEN ACCESS · BILINGUAL · NO LICENSE REQUIRED</div>
+  <h1 id="hero-h1">BASIRA<br><em>CASING DESIGN</em></h1>
+  <p class="hero-sub" id="hero-sub">Five-Tier Adaptive Design Factor Methodology for Oil &amp; Gas Well Integrity</p>
+  <p class="hero-tagline">Von Mises Triaxial Analysis · API 5CT · NACE MR0175/ISO 15156 Compliance</p>
+  <div class="hero-actions">
+    <a href="#calculator" class="btn-primary">Launch Calculator</a>
+    <a href="#theory" class="btn-outline">View Methodology</a>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-item"><span class="stat-value">5</span><span class="stat-label">Design Factor Tiers</span></div>
+    <div class="stat-item"><span class="stat-value">4</span><span class="stat-label">Well Types Validated</span></div>
+    <div class="stat-item"><span class="stat-value">100%</span><span class="stat-label">NACE Compliance Rate</span></div>
+    <div class="stat-item"><span class="stat-value">15.2%</span><span class="stat-label">Avg Cost Reduction</span></div>
+    <div class="stat-item"><span class="stat-value">9</span><span class="stat-label">API 5CT Grades</span></div>
+  </div>
+</div>
+
+<!-- CALCULATOR -->
+<section id="calculator">
+  <div class="sec-tag">ENGINEERING CALCULATOR</div>
+  <h2 class="sec-title">Casing Design Calculator</h2>
+  <div class="calc-grid">
+
+    <!-- Inputs -->
+    <div>
+      <div class="panel">
+        <div class="panel-hd">
+          <div class="panel-title"><div class="dot"></div>WELL PARAMETERS</div>
+        </div>
+        <div class="panel-body">
+          <div class="form-grid">
+
+            <div class="fg full">
+              <label>Well Name / ID</label>
+              <input type="text" id="wellName" value="My-Well-1" placeholder="e.g. Basira-1">
+            </div>
+
+            <div class="fg">
+              <label>Well Type</label>
+              <select id="wellType" onchange="onTypeChange()">
+                <option value="vertical">Vertical</option>
+                <option value="directional">Directional</option>
+                <option value="offshore">Offshore</option>
+              </select>
+            </div>
+
+            <div class="fg">
+              <label>Casing Nominal OD</label>
+              <select id="casingOD">
+                <option value="7">7 inch</option>
+                <option value="9.625" selected>9-5/8 inch</option>
+                <option value="13.375">13-3/8 inch</option>
+              </select>
+            </div>
+
+            <div class="fg">
+              <label id="lbl-depth">Total Depth TVD (m)</label>
+              <input type="number" id="depth" value="3048" min="0" step="1">
+            </div>
+
+            <div class="fg">
+              <label id="lbl-mw">Mud Weight (kg/m³)</label>
+              <input type="number" id="mudWeight" value="1258" min="0" step="1">
+            </div>
+
+            <div class="fg">
+              <label>H₂S Concentration (ppm)</label>
+              <input type="number" id="h2s" value="0" min="0" step="1">
+            </div>
+
+            <div class="fg">
+              <label>CO₂ Partial Pressure (MPa)</label>
+              <input type="number" id="co2" value="0" min="0" step="0.01">
+            </div>
+
+            <div class="fg">
+              <label id="lbl-bht">Bottom-Hole Temp (°C)</label>
+              <input type="number" id="bht" value="110" step="1">
+            </div>
+
+            <div class="fg">
+              <label id="lbl-bhp">Bottom-Hole Pressure (MPa)</label>
+              <input type="number" id="bhp" value="31.3" step="0.1">
+            </div>
+
+            <div class="fg" id="wd-g" style="display:none">
+              <label>Water Depth (m)</label>
+              <input type="number" id="waterDepth" value="0" min="0" step="1">
+            </div>
+
+            <div class="fg" id="bur-g" style="display:none">
+              <label>Build Rate (°/30m)</label>
+              <input type="number" id="buildRate" value="0" min="0" step="0.1">
+            </div>
+
+            <div class="fg" id="inc-g" style="display:none">
+              <label>Max Inclination (°)</label>
+              <input type="number" id="inclination" value="0" min="0" max="90" step="1">
+            </div>
+
+            <div class="fg" id="md-g" style="display:none">
+              <label>MD / TVD Ratio</label>
+              <input type="number" id="mdTvd" value="1.0" min="1.0" step="0.01">
+            </div>
+
+          </div>
+
+          <button class="calc-btn" onclick="calculate()">▶ RUN ANALYSIS</button>
+
+          <div class="ex-row">
+            <button class="ex-btn" onclick="loadEx(1)">BASIRA-1<br>Sour</button>
+            <button class="ex-btn" onclick="loadEx(2)">BASIRA-2<br>HTHP</button>
+            <button class="ex-btn" onclick="loadEx(3)">BASIRA-3<br>Directional</button>
+            <button class="ex-btn" onclick="loadEx(4)">BASIRA-4<br>Deepwater</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div>
+      <div class="panel">
+        <div class="panel-hd">
+          <div class="panel-title"><div class="dot"></div>ANALYSIS RESULTS</div>
+          <span id="wname-disp" style="font-family:var(--mono);font-size:.72rem;color:var(--text-dim);"></span>
+        </div>
+        <div class="panel-body scroll" id="res-body">
+          <div class="results-placeholder">
+            <div class="icon">⬡</div>
+            Enter well parameters and run analysis to view results.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- THEORY -->
+<section id="theory">
+  <div class="sec-tag">METHODOLOGY</div>
+  <h2 class="sec-title">Five-Tier Design Framework</h2>
+
+  <div class="panel" style="margin-bottom:3rem;">
+    <div class="panel-hd"><div class="panel-title"><div class="dot"></div>TIER ASSIGNMENT MATRIX</div></div>
+    <div class="panel-body" style="padding:0;">
+      <table class="tier-table">
+        <thead>
+          <tr><th>Tier</th><th>DF</th><th>Risk Category</th><th>Allowable Stress</th><th>Governing Criterion</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>I — Ultimate</td><td class="df-col" style="color:var(--red)">1.0</td><td>Extreme</td><td>σ_allow = σ_y</td><td>Monitored burst loads only; zero margin</td></tr>
+          <tr><td>II — Near-Ultimate</td><td class="df-col" style="color:var(--orange)">1.1</td><td>High</td><td>0.91 σ_y</td><td>Well-characterised loads; limited intervention</td></tr>
+          <tr><td>III — Standard</td><td class="df-col" style="color:var(--amber)">1.25</td><td>Moderate</td><td>0.80 σ_y</td><td>Vertical sweet wells; normal conditions</td></tr>
+          <tr><td>IV — Recommended</td><td class="df-col" style="color:var(--blue)">1.6</td><td>Elevated</td><td>0.625 σ_y</td><td>Directional wells (BUR ≥ 3°/30m)</td></tr>
+          <tr><td>V — Conservative</td><td class="df-col" style="color:var(--green)">2.0</td><td>Critical</td><td>0.50 σ_y</td><td>Sour ≥50 ppm | HTHP | Deepwater ≥300m</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="theory-grid">
+    <div class="th-card">
+      <h3>Von Mises Triaxial Criterion</h3>
+      <p>Consistent with API TR 5C3. Under thin-wall assumption (t/d ≤ 0.10), the equivalent stress reduces to:</p>
+      <div class="eq-box">σ_eq = √(σ_θ² + σ_z² − σ_θ · σ_z)<br><br>Design: σ_eq ≤ σ_allow = σ_y / DF</div>
+    </div>
+    <div class="th-card">
+      <h3>Burst Load (Hoop Stress)</h3>
+      <p>Worst-case gas-kick internal pressurisation scenario. Maximum load at surface:</p>
+      <div class="eq-box">σ_θ(burst) = [Pi(D) − Po(D)] × d_i / (2t)</div>
+    </div>
+    <div class="th-card">
+      <h3>Collapse Differential Pressure</h3>
+      <p>Full mud column external, gas-evacuated internal worst case:</p>
+      <div class="eq-box">ΔP_collapse = ρ_mud × g × D − P_internal(D)</div>
+    </div>
+    <div class="th-card">
+      <h3>Directional Bending Stress</h3>
+      <p>Superimposed on axial load at dogleg zone for directional wells:</p>
+      <div class="eq-box">σ_bend = E × d_o / (2R)<br>R = 1719.1 / BUR  [metres]<br>E = 206 GPa for steel</div>
+    </div>
+    <div class="th-card">
+      <h3>HTHP Yield Derating</h3>
+      <p>Applied above BHT ~120°C per API TR 5C3. At 171°C, f_T ≈ 0.96:</p>
+      <div class="eq-box">σ_y,eff = f_T × σ_y,nominal<br>σ_allow = σ_y,eff / DF</div>
+    </div>
+    <div class="th-card">
+      <h3>NACE MR0175 / ISO 15156</h3>
+      <p>H₂S ≥ 50 ppm activates sour service Class 0A. Restricts grade list to SSC-resistant materials with hardness ≤ 22 HRC:</p>
+      <div class="eq-box">Compliant: L80-SS · C90 · T95<br>Excluded (Class 0A): Q125*<br>* Without special qualification</div>
+    </div>
+    <div class="th-card">
+      <h3>Tier Assignment Hierarchy</h3>
+      <p>Highest-priority trigger governs. No lower-tier criterion can override an adverse higher-priority trigger:</p>
+      <div class="eq-box">1. H₂S ≥ 50 ppm → DF = 2.0<br>2. BHT ≥ 150°C or BHP ≥ 69 MPa → DF = 2.0<br>3. Water Depth ≥ 300 m → DF = 2.0<br>4. BUR ≥ 3°/30m → DF = 1.6<br>5. MD/TVD > 2.0 → DF = 2.0<br>6. Standard vertical sweet → DF = 1.25</div>
+    </div>
+    <div class="th-card">
+      <h3>Material Selection Logic</h3>
+      <p>Deterministic API 5CT grade selection. NACE constraint is primary hard filter; structural adequacy and cost govern within the compliant set:</p>
+      <div class="eq-box">Grade priority: J55 → K55 → N80 → L80<br>→ L80-SS → C90 → T95 → P110 → Q125<br>Sour filter applied before DF check</div>
+    </div>
+    <div class="th-card">
+      <h3>Axial Tension (Buoyancy)</h3>
+      <p>Buoyancy-corrected string weight, with bending and thermal contributions:</p>
+      <div class="eq-box">F_z(D) = W_air × (1 − ρ_fluid/ρ_steel)<br>         + F_bend + F_thermal<br>ρ_steel = 7,840 kg/m³</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMPLES -->
+<section id="examples">
+  <div class="sec-tag">VALIDATION CASES</div>
+  <h2 class="sec-title">Worked Examples</h2>
+  <div class="ex-grid">
+    <div class="ex-card sour" onclick="loadAndScroll(1)">
+      <div class="ex-num">EXAMPLE 01 — BASIRA-1</div>
+      <div class="ex-name">Vertical Sour Well</div>
+      <div class="ex-df">DF = 2.0</div>
+      <div class="ex-params">
+        Depth: <span>3,048 m (10,000 ft)</span><br>
+        H₂S: <span>2,500 ppm → NACE Class 0A</span><br>
+        BHT / BHP: <span>110°C / 31.3 MPa</span><br>
+        Grade: <span>9-5/8″ L80-SS 71.8 ppf</span><br>
+        Max VM Utilisation: <span>0.855</span>
+      </div>
+      <button class="load-btn">Load in Calculator →</button>
+    </div>
+    <div class="ex-card hthp" onclick="loadAndScroll(2)">
+      <div class="ex-num">EXAMPLE 02 — BASIRA-2</div>
+      <div class="ex-name">HTHP Vertical Well</div>
+      <div class="ex-df">DF = 2.0</div>
+      <div class="ex-params">
+        Depth: <span>4,420 m (14,500 ft)</span><br>
+        BHT: <span>171°C → f_T = 0.96</span><br>
+        BHP: <span>86.2 MPa (12,500 psi)</span><br>
+        Grade: <span>7″ Q125 38.0 ppf</span><br>
+        VM Utilisation: <span>0.645</span>
+      </div>
+      <button class="load-btn">Load in Calculator →</button>
+    </div>
+    <div class="ex-card dir" onclick="loadAndScroll(3)">
+      <div class="ex-num">EXAMPLE 03 — BASIRA-3</div>
+      <div class="ex-name">Directional Well 45°</div>
+      <div class="ex-df">DF = 2.0</div>
+      <div class="ex-params">
+        TVD: <span>3,658 m (12,000 ft)</span><br>
+        H₂S: <span>120 ppm | BUR: 4.0°/30m</span><br>
+        σ_bend: <span>58.7 MPa in dogleg</span><br>
+        Grade: <span>9-5/8″ L80-SS 71.8 ppf</span><br>
+        VM Δ vs vertical: <span>+17.4 ppts</span>
+      </div>
+      <button class="load-btn">Load in Calculator →</button>
+    </div>
+    <div class="ex-card deep" onclick="loadAndScroll(4)">
+      <div class="ex-num">EXAMPLE 04 — BASIRA-4</div>
+      <div class="ex-name">Offshore Deepwater</div>
+      <div class="ex-df">DF = 2.0</div>
+      <div class="ex-params">
+        MD: <span>3,993 m (13,100 ft)</span><br>
+        Water Depth: <span>549 m</span><br>
+        P_seawater: <span>5.52 MPa at mudline</span><br>
+        Grade: <span>13-3/8″ P110 98.0 ppf</span><br>
+        VM Utilisation: <span>0.710</span>
+      </div>
+      <button class="load-btn">Load in Calculator →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sec-tag">ABOUT</div>
+  <h2 class="sec-title">About the Basira Platform</h2>
+  <div class="theory-grid">
+    <div class="th-card">
+      <h3>Research Background</h3>
+      <p>Basira implements a five-tier adaptive design factor framework for oil &amp; gas casing design. Published in Geoenergy Science and Engineering (Elsevier, Scopus Q1) by Abdulwadod Mohammed Sabri, Ministry of Oil — submitted March 2026.</p>
+    </div>
+    <div class="th-card">
+      <h3>Platform Scope</h3>
+      <p>Designed for pre-drill static stress analysis: onshore vertical and moderately deviated wells, and offshore development wells at moderate water depths where APB and torque-drag are not the dominant design drivers.</p>
+    </div>
+    <div class="th-card">
+      <h3>Standards Referenced</h3>
+      <p><strong>API TR 5C3</strong> — Von Mises stress &amp; pressure calculations<br>
+      <strong>API 5CT</strong> — Casing grade specifications<br>
+      <strong>NACE MR0175 / ISO 15156</strong> — Sour service materials<br>
+      <strong>NORSOK D-010</strong> — Well integrity criteria</p>
+    </div>
+    <div class="th-card">
+      <h3>Contact &amp; Citation</h3>
+      <p>Corresponding author: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="48292a2c3d243f292c272c6629242329213b3b31082f25292124662b2725">[email&#160;protected]</a><br><br>
+      <em>No commercial licensing required. Accessible to independent engineers and smaller operators as an open-access alternative to StressCheck and WELLCAT.</em></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  BASIRA CASING DESIGN PLATFORM · Open Access · API 5CT · NACE MR0175/ISO 15156 · Von Mises Triaxial Analysis<br>
+  Published: Geoenergy Science and Engineering · Elsevier · Scopus Q1 · Submitted March 2026<br>
+  Author: Abdulwadod Mohammed Sabri · Ministry of Oil
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ============================================================
+// DATA
+// ============================================================
+const GRADES = {
+  'J55':   {yield:379,  uts:517, sour:false},
+  'K55':   {yield:379,  uts:655, sour:false},
+  'N80':   {yield:552,  uts:689, sour:false},
+  'L80':   {yield:552,  uts:655, sour:false},
+  'L80-SS':{yield:552,  uts:655, sour:true },
+  'C90':   {yield:621,  uts:724, sour:true },
+  'T95':   {yield:655,  uts:758, sour:true },
+  'P110':  {yield:758,  uts:862, sour:false},
+  'Q125':  {yield:862,  uts:931, sour:false},
+};
+
+// OD(in) -> grade -> {weight(ppf), OD_mm, t_mm, di_mm, burst(MPa), collapse(MPa), tension(kN)}
+const SPECS = {
+  '7': {
+    'L80':  {w:29.0,OD:177.8,t:8.05, di:161.7,  burst:69.9,  collapse:52.7,  tension:2246},
+    'L80-SS':{w:29.0,OD:177.8,t:8.05,di:161.7,  burst:69.9,  collapse:52.7,  tension:2246},
+    'N80':  {w:29.0,OD:177.8,t:8.05, di:161.7,  burst:69.9,  collapse:52.7,  tension:2246},
+    'P110': {w:29.0,OD:177.8,t:8.05, di:161.7,  burst:96.5,  collapse:68.5,  tension:3096},
+    'Q125': {w:38.0,OD:177.8,t:10.36,di:157.08, burst:139.7, collapse:116.7, tension:4208},
+    'C90':  {w:29.0,OD:177.8,t:8.05, di:161.7,  burst:75.8,  collapse:55.5,  tension:2556},
+    'T95':  {w:29.0,OD:177.8,t:8.05, di:161.7,  burst:80.1,  collapse:58.3,  tension:2700},
+  },
+  '9.625': {
+    'J55':  {w:47.0,OD:244.5,t:11.99,di:220.5,  burst:38.0,  collapse:36.8,  tension:3381},
+    'N80':  {w:53.5,OD:244.5,t:13.84,di:216.8,  burst:57.2,  collapse:60.9,  tension:3694},
+    'L80':  {w:53.5,OD:244.5,t:13.84,di:216.8,  burst:57.2,  collapse:60.9,  tension:3694},
+    'L80-SS':{w:71.8,OD:244.5,t:15.88,di:212.7, burst:58.5,  collapse:74.3,  tension:7207},
+    'C90':  {w:71.8,OD:244.5,t:15.88,di:212.7,  burst:64.3,  collapse:79.3,  tension:8096},
+    'T95':  {w:71.8,OD:244.5,t:15.88,di:212.7,  burst:67.9,  collapse:79.3,  tension:8547},
+    'P110': {w:53.5,OD:244.5,t:13.84,di:216.8,  burst:78.8,  collapse:72.7,  tension:5094},
+    'Q125': {w:53.5,OD:244.5,t:13.84,di:216.8,  burst:89.6,  collapse:85.0,  tension:5784},
+  },
+  '13.375': {
+    'K55':  {w:72.0,OD:339.7,t:11.99,di:315.7,  burst:37.4,  collapse:34.6,  tension:4448},
+    'N80':  {w:72.0,OD:339.7,t:11.99,di:315.7,  burst:54.4,  collapse:49.0,  tension:6472},
+    'L80':  {w:72.0,OD:339.7,t:11.99,di:315.7,  burst:54.4,  collapse:49.0,  tension:6472},
+    'L80-SS':{w:72.0,OD:339.7,t:11.99,di:315.7, burst:54.4,  collapse:49.0,  tension:6472},
+    'C90':  {w:86.0,OD:339.7,t:13.84,di:312.1,  burst:62.3,  collapse:62.1,  tension:8007},
+    'T95':  {w:86.0,OD:339.7,t:13.84,di:312.1,  burst:65.8,  collapse:65.0,  tension:8451},
+    'P110': {w:98.0,OD:339.7,t:15.88,di:307.9,  burst:74.3,  collapse:86.9,  tension:9298},
+    'Q125': {w:98.0,OD:339.7,t:15.88,di:307.9,  burst:84.5,  collapse:94.0,  tension:10571},
+  }
+};
+
+// Paper examples
+const EXAMPLES = {
+  1:{wellName:'Basira-1',wellType:'vertical',  casingOD:'9.625', depth:3048, mw:1258, h2s:2500, co2:0, bht:110, bhp:31.3, wd:0,   bur:0,   inc:0,  mdtvd:1.0},
+  2:{wellName:'Basira-2',wellType:'vertical',  casingOD:'7',     depth:4420, mw:2060, h2s:0,    co2:0, bht:171, bhp:86.2, wd:0,   bur:0,   inc:0,  mdtvd:1.0},
+  3:{wellName:'Basira-3',wellType:'directional',casingOD:'9.625',depth:3658, mw:1380, h2s:120,  co2:0, bht:130, bhp:45.0, wd:0,   bur:4.0, inc:45, mdtvd:1.25},
+  4:{wellName:'Basira-4',wellType:'offshore',  casingOD:'13.375',depth:3993, mw:1438, h2s:0,    co2:0, bht:91,  bhp:53.7, wd:549, bur:0,   inc:0,  mdtvd:1.0},
+};
+
+let currentUnits = 'si';
+
+// ============================================================
+// UNITS
+// ============================================================
+function setUnits(u) {
+  currentUnits = u;
+  document.querySelectorAll('.toggle-opt').forEach((b,i)=>b.classList.toggle('active',(u==='si'&&i===0)||(u==='field'&&i===1)));
+  document.getElementById('lbl-depth').textContent = u==='si'?'Total Depth TVD (m)':'Total Depth TVD (ft)';
+  document.getElementById('lbl-mw').textContent    = u==='si'?'Mud Weight (kg/m³)' :'Mud Weight (ppg)';
+  document.getElementById('lbl-bht').textContent   = u==='si'?'Bottom-Hole Temp (°C)':'Bottom-Hole Temp (°F)';
+  document.getElementById('lbl-bhp').textContent   = u==='si'?'Bottom-Hole Pressure (MPa)':'Bottom-Hole Pressure (psi)';
+}
+
+// ============================================================
+// LANG
+// ============================================================
+const T = {
+  en:{'hero-h1':'BASIRA<br><em>CASING DESIGN</em>','hero-sub':'Five-Tier Adaptive Design Factor Methodology for Oil &amp; Gas Well Integrity'},
+  ar:{'hero-h1':'بَصِيرَة<br><em>تصميم الغلاف</em>','hero-sub':'منهجية عامل التصميم التكيفي من خمسة مستويات لسلامة آبار النفط والغاز'},
+};
+function setLang(l) {
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  Object.entries(T[l]).forEach(([id,v])=>{const e=document.getElementById(id);if(e)e.innerHTML=v;});
+  document.body.setAttribute('dir',l==='ar'?'rtl':'ltr');
+}
+
+// ============================================================
+// WELL TYPE
+// ============================================================
+function onTypeChange() {
+  const wt = document.getElementById('wellType').value;
+  document.getElementById('wd-g').style.display  = wt==='offshore'    ? '' : 'none';
+  document.getElementById('bur-g').style.display = wt==='directional' ? '' : 'none';
+  document.getElementById('inc-g').style.display = wt==='directional' ? '' : 'none';
+  document.getElementById('md-g').style.display  = wt==='directional' ? '' : 'none';
+}
+
+// ============================================================
+// LOAD EXAMPLES
+// ============================================================
+function loadEx(n) {
+  const e=EXAMPLES[n];
+  document.getElementById('wellName').value    = e.wellName;
+  document.getElementById('wellType').value    = e.wellType;
+  document.getElementById('casingOD').value    = e.casingOD;
+  document.getElementById('depth').value       = e.depth;
+  document.getElementById('mudWeight').value   = e.mw;
+  document.getElementById('h2s').value         = e.h2s;
+  document.getElementById('co2').value         = e.co2;
+  document.getElementById('bht').value         = e.bht;
+  document.getElementById('bhp').value         = e.bhp;
+  document.getElementById('waterDepth').value  = e.wd;
+  document.getElementById('buildRate').value   = e.bur;
+  document.getElementById('inclination').value = e.inc;
+  document.getElementById('mdTvd').value       = e.mdtvd;
+  onTypeChange();
+  calculate();
+}
+function loadAndScroll(n) {
+  loadEx(n);
+  document.getElementById('calculator').scrollIntoView({behavior:'smooth'});
+}
+
+// ============================================================
+// TIER ASSIGNMENT
+// ============================================================
+function assignTier(h2s,bht,bhp,wd,bur,mdtvd,wt) {
+  if(h2s>=50)    return {df:2.0,name:'V — Conservative',reason:`Sour Service (H₂S = ${h2s} ppm ≥ 50 ppm)`,nace:true,color:'#22c55e'};
+  if(bht>=150||bhp>=69) {
+    const parts=[];
+    if(bht>=150) parts.push(`BHT = ${bht}°C ≥ 150°C`);
+    if(bhp>=69)  parts.push(`BHP = ${bhp} MPa ≥ 69 MPa`);
+    return {df:2.0,name:'V — Conservative',reason:'HTHP: '+parts.join(' · '),nace:false,hthp:true,color:'#22c55e'};
+  }
+  if(wt==='offshore'&&wd>=300)  return {df:2.0,name:'V — Conservative',reason:`Deepwater (WD = ${wd} m ≥ 300 m)`,nace:false,color:'#22c55e'};
+  if(wt==='directional') {
+    if(mdtvd>2.0) return {df:2.0,name:'V — Conservative',reason:`Extended Reach (MD/TVD = ${mdtvd} > 2.0)`,nace:false,color:'#22c55e'};
+    if(bur>=3)    return {df:1.6,name:'IV — Recommended',reason:`Directional Well (BUR = ${bur}°/30m ≥ 3)`,nace:false,color:'#38bdf8'};
+  }
+  return {df:1.25,name:'III — Standard',reason:'Standard Vertical Sweet Well',nace:false,color:'#f59e0b'};
+}
+
+// ============================================================
+// MATERIAL SELECTION
+// ============================================================
+function selectGrade(tier,h2s,bht,bhp,wd,wt,odKey) {
+  const isSour=h2s>=50, isHTHP=bht>=150||bhp>=69, isDW=wt==='offshore'&&wd>=300;
+  let pref;
+  if(isSour)        pref='L80-SS';
+  else if(isHTHP)   pref=(bhp>=80||bht>=165)?'Q125':'P110';
+  else if(isDW)     pref='P110';
+  else if(tier.df===1.6) pref='N80';
+  else               pref='N80';
+
+  const avail=SPECS[odKey];
+  if(avail&&avail[pref]) return pref;
+  if(avail) {
+    const keys=Object.keys(avail);
+    if(isSour){const sg=keys.find(g=>GRADES[g]?.sour);if(sg)return sg;}
+    return keys.find(g=>!isSour||(GRADES[g]&&GRADES[g].sour)) || keys[0];
+  }
+  return pref;
+}
+
+// ============================================================
+// TEMPERATURE DERATING
+// ============================================================
+function fT(bht) {
+  if(bht<=120) return 1.0;
+  return Math.max(0.87, 1.0 - (bht-120)*0.00075);
+}
+
+// ============================================================
+// CALCULATIONS
+// ============================================================
+function calculate() {
+  const wellName=document.getElementById('wellName').value||'My-Well';
+  const wt=document.getElementById('wellType').value;
+  const odKey=document.getElementById('casingOD').value;
+
+  let depth=+document.getElementById('depth').value||3000;
+  let mw   =+document.getElementById('mudWeight').value||1200;
+  const h2s=+document.getElementById('h2s').value||0;
+  const co2=+document.getElementById('co2').value||0;
+  let bht  =+document.getElementById('bht').value||90;
+  let bhp  =+document.getElementById('bhp').value||30;
+  const wd =+document.getElementById('waterDepth').value||0;
+  const bur=+document.getElementById('buildRate').value||0;
+  const inc=+document.getElementById('inclination').value||0;
+  const mdtvd=+document.getElementById('mdTvd').value||1.0;
+
+  // Unit conversion
+  if(currentUnits==='field'){
+    depth = depth*0.3048;
+    bhp   = bhp*0.006895;
+    bht   = (bht-32)*5/9;
+    mw    = mw*119.826; // ppg -> kg/m3
+  }
+
+  const tier  = assignTier(h2s,bht,bhp,wd,bur,mdtvd,wt);
+  const grade = selectGrade(tier,h2s,bht,bhp,wd,wt,odKey);
+  const gp    = GRADES[grade]||GRADES['N80'];
+  const spec  = (SPECS[odKey]&&SPECS[odKey][grade])||null;
+
+  const isHTHP=tier.hthp||false;
+  const isSour=tier.nace||false;
+
+  const ftVal   = isHTHP ? fT(bht) : 1.0;
+  const syNom   = gp.yield;
+  const syEff   = syNom*ftVal;
+  const sAllow  = syEff/tier.df;
+
+  // Geometry
+  const OD = spec ? spec.OD : +odKey*25.4;
+  const t  = spec ? spec.t  : OD*0.065;
+  const di = spec ? spec.di : OD-2*t;
+  const OD_m=OD/1000, di_m=di/1000, t_m=t/1000;
+
+  // Burst hoop stress (gas kick, surface)
+  const gasGrad=0.1*9.81/1e6; // MPa/m
+  const Pi_surf=Math.max(bhp-gasGrad*depth,bhp*0.25);
+  const Po_surf=0.1;
+  const sTh_burst=(Pi_surf-Po_surf)*di_m/(2*t_m);
+
+  // Collapse ΔP at TD (gas-evacuated)
+  const Po_td=mw*9.81*depth/1e6;
+  const Pi_td=0.5;
+  const dPcollapse=Math.max(Po_td-Pi_td,0);
+
+  // Seawater external pressure (offshore)
+  const Psw = (wt==='offshore'&&wd>0) ? 1025*9.81*wd/1e6 : 0;
+
+  // Bending stress (directional)
+  let sBend=0;
+  if(wt==='directional'&&bur>0){
+    const R=1719.1/bur;
+    sBend=206000*OD_m/(2*R);
+  }
+
+  // Axial stress (buoyancy-corrected tension)
+  const rhoS=7840, g=9.81;
+  const A=Math.PI*(OD_m**2-di_m**2)/4;
+  const wUnit=rhoS*g*A;
+  const bf=1-mw/rhoS;
+  const Fz=wUnit*depth*Math.max(bf,0.3);
+  const sZ_grav=Fz/A/1e6;
+  const sZ=sZ_grav+sBend;
+
+  // Von Mises
+  const sEq=Math.sqrt(sTh_burst**2+sZ**2-sTh_burst*sZ);
+  const util=sEq/sAllow;
+
+  // Ratings
+  const burstR   = spec ? spec.burst   : syNom*2*t/di;
+  const collapseR= spec ? spec.collapse : syNom*0.8*2*t/di;
+  const burstDF  = burstR/Math.max(Pi_surf-Po_surf,0.01);
+  // Collapse check — use 1.6 for HTHP/deepwater (documented engineering decision)
+  const collapseThresh = (isHTHP||(wt==='offshore'&&wd>=300)) ? 1.6 : tier.df;
+  const collapseDF = collapseR/Math.max(dPcollapse,0.01);
+  const burstPass   = burstDF   >= tier.df;
+  const collapsePass= collapseDF>= collapseThresh;
+  const vmPass      = util <= 1.0;
+
+  document.getElementById('wname-disp').textContent=wellName;
+  renderResults({wellName,wt,grade,gp,spec,tier,ftVal,syNom,syEff,sAllow,isHTHP,isSour,
+    OD,t,di,sTh_burst,sZ,sZ_grav,sBend,sEq,util,burstR,collapseR,burstDF,collapseDF,
+    collapseThresh,burstPass,collapsePass,vmPass,Pi_surf,Po_surf,Po_td,dPcollapse,Psw,
+    depth,bht,bhp,h2s,wd,bur});
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderResults(r) {
+  const f=(v,d=1)=>isNaN(v)?'—':v.toFixed(d);
+  const pc=(v)=>(v*100).toFixed(1)+'%';
+  const cls=(ok)=>ok?'pass':'fail';
+  const txt=(ok)=>ok?'✓ PASS':'✗ FAIL';
+  const col=(ok)=>ok?'var(--green)':'var(--red)';
+  const upct=Math.min(r.util*100,110);
+  const danger=r.util>0.85;
+
+  const html=`
+<div class="results-show">
+  <div class="result-tier">
+    <div>
+      <div class="tier-df">${f(r.tier.df,1)}</div>
+      <div class="tier-df-lbl">DESIGN FACTOR</div>
+    </div>
+    <div class="tier-info">
+      <h3>${r.tier.name}</h3>
+      <p>Recommended Grade: <strong style="color:var(--text-bright)">${r.grade}</strong></p>
+      <div class="reason">▶ ${r.tier.reason}</div>
+    </div>
+  </div>
+
+  <div class="badges">
+    ${r.isSour ?  `<div class="badge pass">✓ NACE MR0175 Class 0A</div>` : `<div class="badge info">◎ Sweet Service</div>`}
+    ${r.isHTHP ?  `<div class="badge warn">⚠ HTHP — f_T = ${f(r.ftVal,3)}</div>` : ''}
+    ${r.vmPass  ? `<div class="badge pass">✓ Von Mises OK</div>` : `<div class="badge fail">✗ Von Mises EXCEEDED</div>`}
+    ${r.burstPass ? `<div class="badge pass">✓ Burst OK</div>` : `<div class="badge fail">✗ Burst FAIL</div>`}
+    ${r.collapsePass ? `<div class="badge pass">✓ Collapse OK</div>` : `<div class="badge warn">⚠ Collapse Marginal</div>`}
+  </div>
+
+  <div class="sec-hdr">STRESS ANALYSIS</div>
+  <div class="res-grid">
+    <div class="rc">
+      <div class="rc-lbl">Allowable Stress</div>
+      <div class="rc-val">${f(r.sAllow)}</div>
+      <div class="rc-unit">MPa (σ_y / DF)</div>
+    </div>
+    <div class="rc">
+      <div class="rc-lbl">Von Mises σ_eq</div>
+      <div class="rc-val ${cls(r.vmPass)}">${f(r.sEq)}</div>
+      <div class="rc-unit">MPa</div>
+    </div>
+    <div class="rc">
+      <div class="rc-lbl">Hoop Stress σ_θ</div>
+      <div class="rc-val">${f(r.sTh_burst)}</div>
+      <div class="rc-unit">MPa (burst scenario)</div>
+    </div>
+    <div class="rc">
+      <div class="rc-lbl">Axial Stress σ_z</div>
+      <div class="rc-val">${f(r.sZ)}</div>
+      <div class="rc-unit">MPa${r.sBend>0 ? ` (+${f(r.sBend)} bend)` : ''}</div>
+    </div>
+  </div>
+
+  <div class="util-container">
+    <div class="util-lbl">
+      <span class="ttl">VON MISES UTILISATION</span>
+      <span style="color:${col(r.vmPass)};font-family:var(--mono);font-size:.72rem;">${pc(r.util)} ${r.vmPass?'✓':'✗'}</span>
+    </div>
+    <div class="util-track">
+      <div class="util-fill ${danger?'danger':''}" style="width:${Math.min(upct,100)}%"></div>
+    </div>
+  </div>
+
+  <div class="sec-hdr">LOAD CHECKS</div>
+  <div class="res-grid">
+    <div class="rc">
+      <div class="rc-lbl">Burst Design Factor</div>
+      <div class="rc-val ${cls(r.burstPass)}">${f(r.burstDF)}</div>
+      <div class="rc-unit" style="color:${col(r.burstPass)}">${txt(r.burstPass)} (req. ${f(r.tier.df,2)})</div>
+    </div>
+    <div class="rc">
+      <div class="rc-lbl">Collapse Design Factor</div>
+      <div class="rc-val ${cls(r.collapsePass)}">${f(r.collapseDF)}</div>
+      <div class="rc-unit" style="color:${col(r.collapsePass)}">${txt(r.collapsePass)} (req. ${f(r.collapseThresh,2)})</div>
+    </div>
+    <div class="rc">
+      <div class="rc-lbl">Design Burst Load</div>
+      <div class="rc-val">${f(r.Pi_surf-r.Po_surf)}</div>
+      <div class="rc-unit">MPa (at surface)</div>
+    </div>
+    <div class="rc">
+      <div class="rc-lbl">Collapse ΔP</div>
+      <div class="rc-val">${f(r.dPcollapse)}</div>
+      <div class="rc-unit">MPa (at TD, gas-evacuated)</div>
+    </div>
+  </div>
+
+  ${r.sBend>0 ? `
+  <div class="sec-hdr">DIRECTIONAL BENDING</div>
+  <div class="res-grid">
+    <div class="rc">
+      <div class="rc-lbl">Bending Stress σ_bend</div>
+      <div class="rc-val warn">${f(r.sBend)}</div>
+      <div class="rc-unit">MPa (at dogleg)</div>
+    </div>
+    <div class="rc">
+      <div class="rc-lbl">Radius of Curvature</div>
+      <div class="rc-val">${f(1719.1/r.bur,1)}</div>
+      <div class="rc-unit">m (BUR = ${r.bur}°/30m)</div>
+    </div>
+    <div class="rc">
+      <div class="rc-lbl">σ_z (gravity only)</div>
+      <div class="rc-val">${f(r.sZ_grav)}</div>
+      <div class="rc-unit">MPa</div>
+    </div>
+    <div class="rc">
+      <div class="rc-lbl">σ_z (total, incl. bend)</div>
+      <div class="rc-val warn">${f(r.sZ)}</div>
+      <div class="rc-unit">MPa</div>
+    </div>
+  </div>` : ''}
+
+  <div class="sec-hdr">MATERIAL SPECIFICATION</div>
+  <table class="spec-table">
+    <tr><td>Grade</td><td><strong style="color:var(--amber)">${r.grade}</strong></td></tr>
+    <tr><td>Nominal Yield σ_y</td><td>${f(r.syNom,0)} MPa (${(r.syNom/6.895).toFixed(0)} ksi)</td></tr>
+    ${r.isHTHP ? `<tr><td>Derated Yield σ_y,eff</td><td>${f(r.syEff,0)} MPa · f_T = ${f(r.ftVal,3)}</td></tr>` : ''}
+    <tr><td>Allowable Stress σ_allow</td><td>${f(r.sAllow,0)} MPa</td></tr>
+    ${r.spec ? `
+    <tr><td>Casing OD</td><td>${f(r.OD,1)} mm (${(r.OD/25.4).toFixed(3)} in)</td></tr>
+    <tr><td>Wall Thickness t</td><td>${f(r.t,2)} mm</td></tr>
+    <tr><td>Nominal Weight</td><td>${r.spec.w} ppf</td></tr>
+    <tr><td>API Burst Rating</td><td>${f(r.burstR,1)} MPa (${(r.burstR/0.006895).toFixed(0)} psi)</td></tr>
+    <tr><td>API Collapse Rating</td><td>${f(r.collapseR,1)} MPa (${(r.collapseR/0.006895).toFixed(0)} psi)</td></tr>
+    ${r.spec.tension ? `<tr><td>Tension Rating</td><td>${r.spec.tension.toLocaleString()} kN</td></tr>` : ''}
+    ` : ''}
+    ${r.isSour ? `<tr><td>NACE Compliance</td><td style="color:var(--green)">MR0175/ISO 15156 Class 0A ✓ (HRC ≤ 22)</td></tr>` : ''}
+  </table>
+
+  <div class="sec-hdr">VON MISES STRESS ENVELOPE</div>
+  <div class="canvas-wrap">
+    <div class="canvas-ttl">σ_θ (Hoop) vs σ_z (Axial) Space · Five-Tier Ellipses · ● = Design Point</div>
+    <canvas id="vm-cvs" width="520" height="400"></canvas>
+  </div>
+</div>`;
+
+  document.getElementById('res-body').innerHTML=html;
+  drawCanvas(r);
+}
+
+// ============================================================
+// VON MISES CANVAS
+// ============================================================
+function drawCanvas(r) {
+  const cvs=document.getElementById('vm-cvs');
+  if(!cvs)return;
+  const ctx=cvs.getContext('2d');
+  const W=cvs.width, H=cvs.height;
+  ctx.clearRect(0,0,W,H);
+
+  // Background
+  ctx.fillStyle='#050e1e';
+  ctx.fillRect(0,0,W,H);
+
+  const cx=W/2, cy=H/2;
+
+  // Grid
+  ctx.strokeStyle='#0f2035';
+  ctx.lineWidth=0.8;
+  for(let x=0;x<=W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<=H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // Axes
+  ctx.strokeStyle='#1e3a5a';
+  ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(20,cy);ctx.lineTo(W-15,cy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx,H-15);ctx.lineTo(cx,20);ctx.stroke();
+
+  // Axis labels
+  ctx.font='11px IBM Plex Mono';
+  ctx.fillStyle='#2a4a6a';
+  ctx.fillText('σ_θ (Hoop) →',W-115,cy-10);
+  ctx.fillText('↑ σ_z (Axial)',cx+8,32);
+
+  // Scale based on syEff
+  const maxR=r.syEff;
+  const scl=Math.min((W/2-35)/(maxR*1.15),(H/2-35)/(maxR*1.3));
+  const toX=s=>cx+s*scl;
+  const toY=s=>cy-s*scl;
+
+  // Five ellipses
+  // Parametric: σθ = r·cos(t) + r/√3·sin(t), σz = 2r/√3·sin(t)
+  const TIERS=[
+    {df:1.0,c:'#ef4444',dash:[],alpha:0.35},
+    {df:1.1,c:'#fb923c',dash:[3,4],alpha:0.35},
+    {df:1.25,c:'#f59e0b',dash:[5,4],alpha:0.4},
+    {df:1.6,c:'#38bdf8',dash:[4,3],alpha:0.4},
+    {df:2.0,c:'#22c55e',dash:[],alpha:0.4},
+  ];
+
+  TIERS.forEach(tier=>{
+    const rad=r.syEff/tier.df;
+    const sq3=Math.sqrt(3);
+    ctx.beginPath();
+    const N=240;
+    for(let i=0;i<=N;i++){
+      const ang=(i/N)*2*Math.PI;
+      const sth=rad*Math.cos(ang)+(rad/sq3)*Math.sin(ang);
+      const sz=(2*rad/sq3)*Math.sin(ang);
+      const px=toX(sth), py=toY(sz);
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.closePath();
+    const isActive=tier.df===r.tier.df;
+    ctx.strokeStyle=tier.c;
+    ctx.lineWidth=isActive?2.5:1;
+    ctx.setLineDash(isActive?[]:tier.dash);
+    ctx.globalAlpha=isActive?1:tier.alpha;
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.globalAlpha=1;
+
+    // Label on right side of ellipse (at t=0 approx max σθ)
+    const labelSth = rad + rad/sq3;
+    const lx = Math.min(toX(labelSth)+4, W-55);
+    const ly = cy - (TIERS.indexOf(tier)-2)*18 - 5;
+    ctx.font='9px IBM Plex Mono';
+    ctx.fillStyle=tier.c;
+    ctx.globalAlpha=isActive?1:tier.alpha+0.1;
+    ctx.fillText(`DF=${tier.df}`,lx,ly);
+    ctx.globalAlpha=1;
+  });
+
+  // Design point
+  const dpX=toX(r.sTh_burst), dpY=toY(r.sZ);
+
+  // Glow
+  const grad=ctx.createRadialGradient(dpX,dpY,2,dpX,dpY,14);
+  grad.addColorStop(0,r.vmPass?'rgba(245,158,11,0.5)':'rgba(239,68,68,0.5)');
+  grad.addColorStop(1,'transparent');
+  ctx.fillStyle=grad;
+  ctx.beginPath();ctx.arc(dpX,dpY,14,0,2*Math.PI);ctx.fill();
+
+  // Point
+  ctx.beginPath();ctx.arc(dpX,dpY,5.5,0,2*Math.PI);
+  ctx.fillStyle=r.vmPass?'#f59e0b':'#ef4444';
+  ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
+
+  // Label
+  ctx.font='10px IBM Plex Mono';
+  ctx.fillStyle=r.vmPass?'#f59e0b':'#ef4444';
+  const lx2=dpX+10, ly2=dpY-10;
+  ctx.fillText(`(${r.sTh_burst.toFixed(0)}, ${r.sZ.toFixed(0)}) MPa`,
+    Math.min(lx2,W-140), Math.max(ly2,15));
+
+  // σ_allow circle (dashed white)
+  ctx.beginPath();
+  ctx.arc(cx,cy,r.sAllow*scl,0,2*Math.PI);
+  ctx.strokeStyle='rgba(255,255,255,0.08)';
+  ctx.setLineDash([2,6]);ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);
+
+  // Origin label
+  ctx.font='10px IBM Plex Mono';
+  ctx.fillStyle='#2a4a6a';
+  ctx.fillText('O',cx+4,cy-5);
+
+  // Scale note
